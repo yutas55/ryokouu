@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
-import 'home_screen.dart';
+import 'splash_screen.dart';
+import 'theme/app_colors.dart';
 
-void main() {
-  runApp(const RentalMotorApp());
-}
+void main() => runApp(const RyokouApp());
 
-class RentalMotorApp extends StatelessWidget {
-  const RentalMotorApp({super.key});
+class RyokouApp extends StatelessWidget {
+  const RyokouApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'RYOKOU',
       debugShowCheckedModeBanner: false,
-      title: 'Rental Motor',
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        scaffoldBackgroundColor: const Color(0xFFF7F9FC),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        // Kalau mau font Poppins: tambah package google_fonts lalu
+        // pakai textTheme: GoogleFonts.poppinsTextTheme()
       ),
-      home: HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

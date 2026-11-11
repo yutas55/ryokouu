@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'models/motor.dart';
+import 'theme/app_colors.dart';
+import 'widgets/motor_cards.dart';
+
 class ProdukScreen extends StatefulWidget {
   const ProdukScreen({super.key});
 
@@ -10,172 +14,118 @@ class ProdukScreen extends StatefulWidget {
 class _ProdukScreenState extends State<ProdukScreen> {
   String _searchText = '';
 
-  final List<Map<String, String>> _motorList = [
-    {
-      'name': 'Honda Vario 125',
-      'specs': '125cc • Tahun 2023',
-      'price': 'Rp 85.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500',
-    },
-    {
-      'name': 'Honda Beat Street',
-      'specs': '110cc • Tahun 2023',
-      'price': 'Rp 70.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500',
-    },
-    {
-      'name': 'Honda Scoopy',
-      'specs': '110cc • Tahun 2024',
-      'price': 'Rp 80.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500',
-    },
-    {
-      'name': 'Yamaha NMAX 155',
-      'specs': '155cc • ABS 2023',
-      'price': 'Rp 120.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=500',
-    },
-    {
-      'name': 'Yamaha Aerox 155',
-      'specs': '155cc • Tahun 2024',
-      'price': 'Rp 110.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=500',
-    },
-    {
-      'name': 'Yamaha Fazzio',
-      'specs': '125cc • Tahun 2024',
-      'price': 'Rp 90.000/hari',
-      'image':
-          'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500',
-    },
-  ];
+  @override
+  Widget build(BuildContext context) {
+    final motorFiltered = dataMotor.where((motor) {
+      return motor.nama.toLowerCase().contains(_searchText.toLowerCase());
+    }).toList();
+    final jumlahTersedia = dataMotor.where((m) => m.tersedia).length;
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Search
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.search, color: AppColors.grey, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) => setState(() => _searchText = value),
+                    decoration: const InputDecoration(
+                      hintText: 'Cari merek atau tipe motor',
+                      hintStyle: TextStyle(fontSize: 12, color: AppColors.grey),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Chip status
+          Row(
+            children: [
+              StatusChip(
+                icon: Icons.check_circle_outline,
+                label: 'Motor Yang Tersedia',
+                count: jumlahTersedia,
+              ),
+              const SizedBox(width: 8),
+              const StatusChip(
+                icon: Icons.access_time,
+                label: 'Motor Sedang Disewa',
+                count: 7,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Grid motor
+          Expanded(
+            child: motorFiltered.isEmpty
+                ? const Center(child: Text('Motor tidak ditemukan'))
+                : GridView.builder(
+                    itemCount: motorFiltered.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 0.72,
+                    ),
+                    itemBuilder: (_, i) => MotorGridCard(motor: motorFiltered[i]),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatusChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final int count;
+  const StatusChip({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.count,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final motorFiltered = _motorList.where((motor) {
-      return motor['name']!.toLowerCase().contains(_searchText.toLowerCase());
-    }).toList();
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            onChanged: (value) {
-              setState(() {
-                _searchText = value;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Cari merk atau tipe motor...',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 11, color: Colors.white),
+          const SizedBox(width: 4),
+          Text(
+            '$label  $count',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 8,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ),
-        Expanded(
-          child: motorFiltered.isEmpty
-              ? const Center(child: Text('Motor tidak ditemukan'))
-              : GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  itemCount: motorFiltered.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.62,
-                  ),
-                  itemBuilder: (context, index) {
-                    final motor = motorFiltered[index];
-
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              motor['image']!,
-                              height: 105,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height: 105,
-                                  color: Colors.grey.shade200,
-                                  child: const Center(
-                                    child: Icon(Icons.two_wheeler, size: 40),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            motor['name']!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            motor['specs']!,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            motor['price']!,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF2E7D32),
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 14,
-                                color: Color(0xFF2E7D32),
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'Tersedia',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF2E7D32),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
