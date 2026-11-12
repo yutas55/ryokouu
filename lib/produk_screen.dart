@@ -16,17 +16,19 @@ class ProdukScreen extends StatefulWidget {
 class _ProdukScreenState extends State<ProdukScreen> {
   String _searchText = '';
 
-    @override
+  @override
   Widget build(BuildContext context) {
     final query = _searchText.toLowerCase();
     final motorFiltered = dataMotor.where((motor) {
       return motor.nama.toLowerCase().contains(query) ||
           motor.platNo.toLowerCase().contains(query);
     }).toList();
-    final jumlahTersedia =
-        dataMotor.where((m) => m.status == StatusMotor.tersedia).length;
-    final jumlahDisewa =
-        dataMotor.where((m) => m.status == StatusMotor.disewa).length;
+    final jumlahTersedia = dataMotor
+        .where((m) => m.status == StatusMotor.tersedia)
+        .length;
+    final jumlahDisewa = dataMotor
+        .where((m) => m.status == StatusMotor.disewa)
+        .length;
 
     return Scaffold(
       appBar: const RyokouTopBar(title: 'KATALOG PRODUK'),
@@ -49,12 +51,13 @@ class _ProdukScreenState extends State<ProdukScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
-                      onChanged: (value) =>
-                          setState(() => _searchText = value),
+                      onChanged: (value) => setState(() => _searchText = value),
                       decoration: const InputDecoration(
                         hintText: 'Cari merek atau tipe motor',
-                        hintStyle:
-                            TextStyle(fontSize: 12, color: AppColors.grey),
+                        hintStyle: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.grey,
+                        ),
                         border: InputBorder.none,
                       ),
                     ),
@@ -91,11 +94,11 @@ class _ProdukScreenState extends State<ProdukScreen> {
                       itemCount: motorFiltered.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.72,
-                      ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.72,
+                          ),
                       itemBuilder: (_, i) =>
                           MotorGridCard(motor: motorFiltered[i]),
                     ),
@@ -105,6 +108,7 @@ class _ProdukScreenState extends State<ProdukScreen> {
       ),
     );
   }
+}
 
 class StatusChip extends StatelessWidget {
   final IconData icon;
