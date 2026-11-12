@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/navbar.dart';
 import 'theme/app_assets.dart';
 import 'widgets/common_widgets.dart';
+import 'widgets/navbar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,16 +24,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            RyokouAppBar(),
-            Expanded(
-              child: Center(
-                child: AssetImg(AppAssets.motorSplash, width: 220, height: 180),
-              ),
-            ),
-          ],
+      backgroundColor: Colors.white,
+      body: Center(
+        child: AssetImg(
+          AppAssets.logo,
+          width: 160,
+          height: 160,
+          fallbackIcon: Icons.two_wheeler,
         ),
       ),
     );
