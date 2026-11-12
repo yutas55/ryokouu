@@ -1,31 +1,42 @@
 import '../theme/app_assets.dart';
 
-class Motor {
-  final String nama;
-  final int tahun;
-  final int cc;
-  final int harga;
-  final String image;
-  final bool tersedia;
+enum StatusMotor {
+  tersedia('Tersedia'),
+  disewa('Disewa'),
+  perbaikan('Perbaikan');
 
-  const Motor({
-    required this.nama,
-    required this.tahun,
-    required this.cc,
-    required this.harga,
-    required this.image,
-    this.tersedia = true,
-  });
+  final String label;
+  const StatusMotor(this.label);
 }
 
-const List<Motor> dataMotor = [
-  Motor(nama: 'Vario ISS SP', tahun: 2022, cc: 125, harga: 110000, image: AppAssets.vario),
-  Motor(nama: 'BEAT Deluxe', tahun: 2020, cc: 110, harga: 80000, image: AppAssets.beat),
-  Motor(nama: 'Vario ISS SP', tahun: 2022, cc: 125, harga: 110000, image: AppAssets.vario),
-  Motor(nama: 'Vario ISS SP', tahun: 2022, cc: 125, harga: 110000, image: AppAssets.vario),
-  Motor(nama: 'Vario ISS SP', tahun: 2022, cc: 125, harga: 110000, image: AppAssets.vario),
-  Motor(nama: 'Vario ISS SP', tahun: 2022, cc: 125, harga: 110000, image: AppAssets.vario),
-];
+class Motor {
+  final String platNo;
+  final String merek;
+  final String model;
+  final int tahun;
+  final int cc;
+  final String warna;
+  final StatusMotor status;
+  final int hargaSewaPerHari;
+  final int dendaPerJam; 
+  final String image; 
+
+  const Motor({
+    required this.platNo,
+    required this.merek,
+    required this.model,
+    required this.tahun,
+    required this.cc,
+    required this.warna,
+    required this.status,
+    required this.hargaSewaPerHari,
+    required this.dendaPerJam,
+    required this.image,
+  });
+
+  String get nama => '$merek $model';
+  bool get tersedia => status == StatusMotor.tersedia;
+}
 
 String formatRupiah(int n) {
   final s = n.toString();
