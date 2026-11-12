@@ -18,7 +18,7 @@ class MotorListCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, child: BadgeTersedia()),
+          Positioned(top: 0, left: 0, child: BadgeStatus(status: motor.status)),
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 22, 12, 10),
             child: Row(
@@ -40,7 +40,7 @@ class MotorListCard extends StatelessWidget {
                       SpecRow(motor: motor),
                       const Divider(height: 14, color: AppColors.border),
                       Text(
-                        '${formatRupiah(motor.harga)} / hari',
+                        '${formatRupiah(motor.hargaSewaPerHari)} / hari',
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -48,9 +48,9 @@ class MotorListCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      const Align(
+                      Align(
                         alignment: Alignment.centerRight,
-                        child: SewaButton(),
+                        child: SewaButton(enabled: motor.tersedia),
                       ),
                     ],
                   ),
@@ -78,7 +78,7 @@ class MotorGridCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, child: BadgeTersedia()),
+          Positioned(top: 0, left: 0, child: BadgeStatus(status: motor.status)),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 22, 10, 10),
             child: Column(
@@ -108,7 +108,7 @@ class MotorGridCard extends StatelessWidget {
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
-                        formatRupiah(motor.harga),
+                        formatRupiah(motor.hargaSewaPerHari),
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -125,7 +125,10 @@ class MotorGridCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                const SizedBox(width: double.infinity, child: SewaButton()),
+                SizedBox(
+                  width: double.infinity,
+                  child: SewaButton(enabled: motor.tersedia),
+                ),
               ],
             ),
           ),

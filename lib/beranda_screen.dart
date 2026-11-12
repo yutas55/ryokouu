@@ -10,7 +10,7 @@ class BerandaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rekomendasi = dataMotor.take(2).toList();
+    final rekomendasi = dataMotor.where((m) => m.tersedia).take(2).toList();
 
     return ListView(
       padding: const EdgeInsets.all(16),

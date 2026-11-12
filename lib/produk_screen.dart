@@ -16,10 +16,15 @@ class _ProdukScreenState extends State<ProdukScreen> {
 
   @override
   Widget build(BuildContext context) {
+        final query = _searchText.toLowerCase();
     final motorFiltered = dataMotor.where((motor) {
-      return motor.nama.toLowerCase().contains(_searchText.toLowerCase());
+      return motor.nama.toLowerCase().contains(query) ||
+          motor.platNo.toLowerCase().contains(query);
     }).toList();
-    final jumlahTersedia = dataMotor.where((m) => m.tersedia).length;
+    final jumlahTersedia =
+        dataMotor.where((m) => m.status == StatusMotor.tersedia).length;
+    final jumlahDisewa =
+        dataMotor.where((m) => m.status == StatusMotor.disewa).length;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -62,7 +67,7 @@ class _ProdukScreenState extends State<ProdukScreen> {
                 count: jumlahTersedia,
               ),
               const SizedBox(width: 8),
-              const StatusChip(
+              StatusChip(
                 icon: Icons.access_time,
                 label: 'Motor Sedang Disewa',
                 count: 7,
