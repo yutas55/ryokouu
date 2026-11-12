@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/navbar.dart';
+import 'widgets/topbar.dart';
 import 'theme/app_colors.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -35,18 +37,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.background,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 14),
-            _buildInfoAplikasi(),
-            const SizedBox(height: 14),
-            _buildDataDiri(),
-          ],
+    return Scaffold(
+      appBar: const RyokouTopBar(title: 'SETTING'),
+      bottomNavigationBar: const RyokouNavBar(current: NavTab.setting),
+      body: ColoredBox(
+        color: AppColors.background,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              _buildHeader(),
+              const SizedBox(height: 14),
+              _buildInfoAplikasi(),
+              const SizedBox(height: 14),
+              _buildDataDiri(),
+            ],
+          ),
         ),
       ),
     );
@@ -74,9 +80,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   OutlineInputBorder _border(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: color),
-      );
+    borderRadius: BorderRadius.circular(14),
+    borderSide: BorderSide(color: color),
+  );
 
   Widget _field({
     required String label,
@@ -106,8 +112,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             hintText: hint,
             hintStyle: const TextStyle(fontSize: 14, color: AppColors.hint),
             isDense: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 15,
+            ),
             enabledBorder: _border(AppColors.border),
             focusedBorder: _border(AppColors.primary),
             errorBorder: _border(Colors.redAccent),
@@ -183,7 +191,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   'Akun pengguna',
                   style: TextStyle(
-                      fontSize: 12, color: AppColors.textSecondary),
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -227,8 +237,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Text(
             label,
-            style:
-                const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -282,8 +294,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               keyboardType: TextInputType.emailAddress,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) return 'Email wajib diisi';
-                final ok =
-                    RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
+                final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                    .hasMatch(v.trim());
                 return ok ? null : 'Format email tidak valid';
               },
             ),
@@ -334,4 +346,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
+}

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'beranda_screen.dart';
+import 'produk_screen.dart';
+import 'profile_screen.dart';
 import 'splash_screen.dart';
 import 'theme/app_colors.dart';
+import 'widgets/navbar.dart';
 
 void main() => runApp(const RyokouApp());
 
@@ -17,10 +21,26 @@ class RyokouApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        // Kalau mau font Poppins: tambah package google_fonts lalu
-        // pakai textTheme: GoogleFonts.poppinsTextTheme()
       ),
       home: const SplashScreen(),
+      onGenerateRoute: (settings) {
+        final Widget page;
+        if (settings.name == NavTab.produk.route) {
+          page = const ProdukScreen();
+        } else if (settings.name == NavTab.setting.route) {
+          page = const ProfileScreen();
+        } else {
+          page = const BerandaScreen();
+        }
+        return PageRouteBuilder<void>(
+          settings: settings,
+          transitionDuration: const Duration(milliseconds: 200),
+          reverseTransitionDuration: const Duration(milliseconds: 200),
+          pageBuilder: (_, __, ___) => page,
+          transitionsBuilder: (_, animation, __, child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
+      },
     );
   }
 }

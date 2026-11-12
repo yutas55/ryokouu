@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/navbar.dart';
+import 'widgets/topbar.dart';
 import 'models/motor.dart';
 import 'theme/app_colors.dart';
 import 'widgets/motor_cards.dart';
@@ -14,9 +16,9 @@ class ProdukScreen extends StatefulWidget {
 class _ProdukScreenState extends State<ProdukScreen> {
   String _searchText = '';
 
-  @override
+    @override
   Widget build(BuildContext context) {
-        final query = _searchText.toLowerCase();
+    final query = _searchText.toLowerCase();
     final motorFiltered = dataMotor.where((motor) {
       return motor.nama.toLowerCase().contains(query) ||
           motor.platNo.toLowerCase().contains(query);
@@ -26,76 +28,83 @@ class _ProdukScreenState extends State<ProdukScreen> {
     final jumlahDisewa =
         dataMotor.where((m) => m.status == StatusMotor.disewa).length;
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Search
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.search, color: AppColors.grey, size: 20),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) => setState(() => _searchText = value),
-                    decoration: const InputDecoration(
-                      hintText: 'Cari merek atau tipe motor',
-                      hintStyle: TextStyle(fontSize: 12, color: AppColors.grey),
-                      border: InputBorder.none,
+    return Scaffold(
+      appBar: const RyokouTopBar(title: 'KATALOG PRODUK'),
+      bottomNavigationBar: const RyokouNavBar(current: NavTab.produk),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: AppColors.grey, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) =>
+                          setState(() => _searchText = value),
+                      decoration: const InputDecoration(
+                        hintText: 'Cari merek atau tipe motor',
+                        hintStyle:
+                            TextStyle(fontSize: 12, color: AppColors.grey),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
+                  const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Chip status
+            Row(
+              children: [
+                StatusChip(
+                  icon: Icons.check_circle_outline,
+                  label: 'Motor Yang Tersedia',
+                  count: jumlahTersedia,
                 ),
-                const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
+                const SizedBox(width: 8),
+                StatusChip(
+                  icon: Icons.access_time,
+                  label: 'Motor Sedang Disewa',
+                  count: jumlahDisewa,
+                ),
               ],
             ),
-          ),
-          const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
-          // Chip status
-          Row(
-            children: [
-              StatusChip(
-                icon: Icons.check_circle_outline,
-                label: 'Motor Yang Tersedia',
-                count: jumlahTersedia,
-              ),
-              const SizedBox(width: 8),
-              StatusChip(
-                icon: Icons.access_time,
-                label: 'Motor Sedang Disewa',
-                count: 7,
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-
-          // Grid motor
-          Expanded(
-            child: motorFiltered.isEmpty
-                ? const Center(child: Text('Motor tidak ditemukan'))
-                : GridView.builder(
-                    itemCount: motorFiltered.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.72,
+            // Grid motor
+            Expanded(
+              child: motorFiltered.isEmpty
+                  ? const Center(child: Text('Motor tidak ditemukan'))
+                  : GridView.builder(
+                      itemCount: motorFiltered.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 0.72,
+                      ),
+                      itemBuilder: (_, i) =>
+                          MotorGridCard(motor: motorFiltered[i]),
                     ),
-                    itemBuilder: (_, i) => MotorGridCard(motor: motorFiltered[i]),
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
-}
 
 class StatusChip extends StatelessWidget {
   final IconData icon;
