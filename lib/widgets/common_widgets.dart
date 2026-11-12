@@ -62,27 +62,41 @@ class RyokouAppBar extends StatelessWidget {
   }
 }
 
-// ---------- BADGE TERSEDIA ----------
-class BadgeTersedia extends StatelessWidget {
-  const BadgeTersedia({super.key});
+class BadgeStatus extends StatelessWidget {
+  final StatusMotor status;
+  const BadgeStatus({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
+    final Color bg;
+    final Color fg;
+    switch (status) {
+      case StatusMotor.tersedia:
+        bg = AppColors.badgeBg;
+        fg = AppColors.badgeText;
+      case StatusMotor.disewa:
+        bg = const Color(0xFFFFE8C2);
+        fg = const Color(0xFF9A5B00);
+      case StatusMotor.perbaikan:
+        bg = const Color(0xFFFFD9D9);
+        fg = const Color(0xFFB3261E);
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: const BoxDecoration(
-        color: AppColors.badgeBg,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(8),
           bottomRight: Radius.circular(8),
         ),
       ),
-      child: const Text(
-        'Tersedia',
+      child: Text(
+        status.label,
         style: TextStyle(
           fontSize: 8,
           fontWeight: FontWeight.w600,
-          color: AppColors.badgeText,
+          color: fg,
         ),
       ),
     );
@@ -117,23 +131,24 @@ class SpecRow extends StatelessWidget {
 
 class SewaButton extends StatelessWidget {
   final VoidCallback? onPressed;
-  const SewaButton({super.key, this.onPressed});
+  final bool enabled;
+  const SewaButton({super.key, this.onPressed, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.primary,
+      color: enabled ? AppColors.primary : AppColors.border,
       borderRadius: BorderRadius.circular(4),
       child: InkWell(
         borderRadius: BorderRadius.circular(4),
-        onTap: onPressed ?? () {},
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        onTap: enabled ? (onPressed ?? () {}) : null,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Text(
-            'Sewa Sekarang',
+            enabled ? 'Sewa Sekarang' : 'Tidak Tersedia',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white,
+              color: enabled ? Colors.white : AppColors.grey,
               fontSize: 9,
               fontWeight: FontWeight.w600,
             ),
