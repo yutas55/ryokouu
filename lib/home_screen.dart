@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'beranda_screen.dart';
 import 'produk_screen.dart';
@@ -29,14 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             const RyokouAppBar(),
-            Expanded(child: IndexedStack(index: _index, children: _pages)),
+            Expanded(
+              child: IndexedStack(index: _index, children: _pages),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          border: Border(top: BorderSide(color: AppColors.border)),
+          border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x0F000000),
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
+          ],
         ),
         child: SafeArea(
           top: false,
@@ -55,25 +65,77 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _navItem(int i, IconData icon, String label) {
     final active = _index == i;
     final color = active ? AppColors.primary : Colors.black;
+
     return Expanded(
       child: InkWell(
-        onTap: () => setState(() => _index = i),
+        onTap: () {
+          if (_index == i) return;
+          HapticFeedback.selectionClick(); // getar halus saat pindah tab
+          setState(() => _index = i);
+        },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 28, color: color),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-            ],
+          // Warna icon + teks berubah halus (fade) antara hitam <-> warna utama
+          child: TweenAnimationBuilder<Color?>(
+            tween: ColorTween(end: color),
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            builder: (context, c, _) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon sedikit membesar saat aktif
+                  AnimatedScale(
+                    scale: active ? 1.12 : 1.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOutBack,
+                    child: Icon(icon, size: 28, color: c),
+                  ),
+                  const SizedBox(height: 2),
+                  // Lebar garis bawah mengikuti lebar teks
+                  IntrinsicWidth(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          label,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: c,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        // Garis bawah melebar dari tengah saat aktif
+                        TweenAnimationBuilder<double>(
+                          tween: Tween<double>(end: active ? 1.0 : 0.0),
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeOut,
+                          builder: (context, v, _) {
+                            return SizedBox(
+                              height: 2,
+                              child: Align(
+                                child: FractionallySizedBox(
+                                  widthFactor: v,
+                                  child: Container(
+                                    height: 2,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

@@ -39,7 +39,11 @@ class BerandaScreen extends StatelessWidget {
               SizedBox(height: 10),
               Text(
                 'Daerah Malang\ndan Batu',
-                style: TextStyle(color: Colors.white70, fontSize: 11, height: 1.4),
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 11,
+                  height: 1.4,
+                ),
               ),
             ],
           ),
