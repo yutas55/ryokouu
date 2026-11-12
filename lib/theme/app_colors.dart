@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const primary = Color(0xFF0F4C5C); // hijau tosca gelap
+  static const primary = Color(0xFF104652);
   static const badgeBg = Color(0xFFC8F7DC); // badge "Tersedia"
   static const badgeText = Color(0xFF1B7F4B);
   static const border = Color(0xFFD9D9D9);

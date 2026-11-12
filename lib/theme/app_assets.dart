@@ -10,7 +10,7 @@
 //        - assets/images/
 // Selama gambar belum ada, otomatis tampil ikon placeholder.
 class AppAssets {
-  static const logo = 'assets/images/logo.png';
+  static const logo = 'assetslogo.png';
   static const motorSplash = 'assets/images/motor_splash.png';
   static const vario = 'assets/images/vario.png';
   static const beat = 'assets/images/beat.png';
