@@ -1,4 +1,4 @@
-import '../theme/app_assets.dart';
+import '/theme/app_assets.dart';
 
 enum StatusMotor {
   tersedia('Tersedia'),
@@ -18,8 +18,8 @@ class Motor {
   final String warna;
   final StatusMotor status;
   final int hargaSewaPerHari;
-  final int dendaPerJam; 
-  final String image; 
+  final int dendaPerJam;
+  final String image;
 
   const Motor({
     required this.platNo,
