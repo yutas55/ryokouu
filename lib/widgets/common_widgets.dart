@@ -62,6 +62,7 @@ class RyokouAppBar extends StatelessWidget {
   }
 }
 
+// ---------- BADGE STATUS (Tersedia / Disewa / Perbaikan) ----------
 class BadgeStatus extends StatelessWidget {
   final StatusMotor status;
   const BadgeStatus({super.key, required this.status});
@@ -83,18 +84,18 @@ class BadgeStatus extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(8),
-          bottomRight: Radius.circular(8),
+          topLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
         ),
       ),
       child: Text(
         status.label,
         style: TextStyle(
-          fontSize: 8,
+          fontSize: 10,
           fontWeight: FontWeight.w600,
           color: fg,
         ),
@@ -109,19 +110,19 @@ class SpecRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(fontSize: 9, color: AppColors.grey);
+    const style = TextStyle(fontSize: 11, color: AppColors.grey);
     return FittedBox(
       fit: BoxFit.scaleDown,
       alignment: Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_today_outlined, size: 9, color: AppColors.grey),
-          const SizedBox(width: 3),
+          const Icon(Icons.calendar_today_outlined, size: 12, color: AppColors.grey),
+          const SizedBox(width: 4),
           Text('Tahun ${motor.tahun}', style: style),
-          const SizedBox(width: 6),
-          const Icon(Icons.speed, size: 9, color: AppColors.grey),
-          const SizedBox(width: 3),
+          const SizedBox(width: 8),
+          const Icon(Icons.speed, size: 12, color: AppColors.grey),
+          const SizedBox(width: 4),
           Text('${motor.cc} CC', style: style),
         ],
       ),
@@ -138,18 +139,18 @@ class SewaButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: enabled ? AppColors.primary : AppColors.border,
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(8),
         onTap: enabled ? (onPressed ?? () {}) : null,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Text(
             enabled ? 'Sewa Sekarang' : 'Tidak Tersedia',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: enabled ? Colors.white : AppColors.grey,
-              fontSize: 9,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
           ),
