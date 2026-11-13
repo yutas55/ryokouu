@@ -75,6 +75,8 @@ class _NavItem extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
+        // t: 0 = tidak aktif, 1 = aktif. Satu animasi mengatur warna,
+        // ukuran icon, dan lebar garis bawah sekaligus.
         child: TweenAnimationBuilder<double>(
           tween: Tween<double>(begin: 0, end: active ? 1 : 0),
           duration: const Duration(milliseconds: 300),
@@ -94,38 +96,41 @@ class _NavItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 3),
-                // Lebar garis bawah mengikuti lebar teks
-                IntrinsicWidth(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
+                // Teks + garis bawah. Lebar garis mengikuti lebar teks
+                // (ukuran Stack ditentukan oleh Text, bukan perhitungan
+                // intrinsic yang bisa menghasilkan NaN).
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Text(
                         tab.label,
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: color,
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      SizedBox(
-                        height: 2,
-                        child: Align(
-                          child: FractionallySizedBox(
-                            widthFactor: t,
-                            child: Container(
-                              height: 2,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      height: 2,
+                      child: Align(
+                        child: FractionallySizedBox(
+                          widthFactor: t,
+                          child: Container(
+                            height: 2,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(2),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             );
