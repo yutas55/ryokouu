@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'beranda_screen.dart';
 import 'produk_screen.dart';
-import 'profile_screen.dart';
+import 'setting_screen.dart';
 import 'splash_screen.dart';
 import 'theme/app_colors.dart';
 import 'widgets/navbar.dart';
@@ -28,7 +28,7 @@ class RyokouApp extends StatelessWidget {
         if (settings.name == NavTab.produk.route) {
           page = const ProdukScreen();
         } else if (settings.name == NavTab.setting.route) {
-          page = const ProfileScreen();
+          page = const SettingScreen();
         } else {
           page = const BerandaScreen();
         }
