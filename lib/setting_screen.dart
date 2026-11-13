@@ -232,7 +232,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           const SizedBox(height: 16),
           SizedBox(
-            height: 76,
+            height: 84,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -276,7 +276,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Widget _tileStatusSewa() {
+   Widget _tileStatusSewa() {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -291,6 +291,7 @@ class _SettingScreenState extends State<SettingScreen> {
             'STATUS SEWA',
             style: TextStyle(
               fontSize: 8,
+              height: 1.25,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5,
               color: AppColors.textSecondary,
@@ -301,6 +302,7 @@ class _SettingScreenState extends State<SettingScreen> {
             'Belum Menyewa\nMotor',
             style: TextStyle(
               fontSize: 13,
+              height: 1.25,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
             ),
@@ -309,7 +311,6 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
     );
   }
-
   Widget _tileSewaSekarang() {
     return Material(
       color: AppColors.primary,
