@@ -4,8 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../models/motor.dart';
 import '../theme/status_style.dart';
 
-/// Chip filter status di bagian atas Katalog Produk.
-/// Saat dipilih, chip diberi cincin berwarna dengan celah putih.
 class StatusFilterChip extends StatelessWidget {
   final StatusMotor status;
   final int count;
