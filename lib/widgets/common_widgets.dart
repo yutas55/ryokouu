@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/motor.dart';
 import '../theme/app_assets.dart';
 import '../theme/app_colors.dart';
+import '../theme/status_style.dart';
 
 // ---------- WIDGET GAMBAR DENGAN FALLBACK ----------
 class AssetImg extends StatelessWidget {
@@ -29,7 +30,11 @@ class AssetImg extends StatelessWidget {
       errorBuilder: (_, __, ___) => SizedBox(
         width: width,
         height: height,
-        child: Icon(fallbackIcon, color: AppColors.border, size: (height ?? 48) * 0.6),
+        child: Icon(
+          fallbackIcon,
+          color: AppColors.border,
+          size: (height ?? 48) * 0.6,
+        ),
       ),
     );
   }
@@ -50,11 +55,20 @@ class RyokouAppBar extends StatelessWidget {
       ),
       child: const Row(
         children: [
-          AssetImg(AppAssets.logo, width: 24, height: 24, fallbackIcon: Icons.circle),
+          AssetImg(
+            AppAssets.logo,
+            width: 24,
+            height: 24,
+            fallbackIcon: Icons.circle,
+          ),
           SizedBox(width: 8),
           Text(
             'RYOKOU',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: 0.5),
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              letterSpacing: 0.5,
+            ),
           ),
         ],
       ),
@@ -69,59 +83,52 @@ class BadgeStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color bg;
-    final Color fg;
-    switch (status) {
-      case StatusMotor.tersedia:
-        bg = AppColors.badgeBg;
-        fg = AppColors.badgeText;
-      case StatusMotor.disewa:
-        bg = const Color(0xFFFFE8C2);
-        fg = const Color(0xFF9A5B00);
-      case StatusMotor.perbaikan:
-        bg = const Color(0xFFFFD9D9);
-        fg = const Color(0xFFB3261E);
-    }
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: bg,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-        ),
+        color: status.badgeColor,
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         status.label,
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-          color: fg,
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
         ),
       ),
     );
   }
 }
 
+// ---------- BARIS SPESIFIKASI: "Tahun 2023 • 110 CC" ----------
 class SpecRow extends StatelessWidget {
   final Motor motor;
   const SpecRow({super.key, required this.motor});
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(fontSize: 11, color: AppColors.grey);
+    const style = TextStyle(fontSize: 11.5, color: AppColors.textMuted);
     return FittedBox(
       fit: BoxFit.scaleDown,
       alignment: Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_today_outlined, size: 12, color: AppColors.grey),
+          const Icon(
+            Icons.calendar_today_outlined,
+            size: 12,
+            color: AppColors.textFaint,
+          ),
           const SizedBox(width: 4),
           Text('Tahun ${motor.tahun}', style: style),
-          const SizedBox(width: 8),
-          const Icon(Icons.speed, size: 12, color: AppColors.grey),
+          const SizedBox(width: 6),
+          const Text(
+            '•',
+            style: TextStyle(fontSize: 11, color: AppColors.textFaint),
+          ),
+          const SizedBox(width: 6),
+          const Icon(Icons.speed, size: 12, color: AppColors.textFaint),
           const SizedBox(width: 4),
           Text('${motor.cc} CC', style: style),
         ],
@@ -130,28 +137,36 @@ class SpecRow extends StatelessWidget {
   }
 }
 
-class SewaButton extends StatelessWidget {
+// ---------- TOMBOL KARTU MOTOR (warna & teks mengikuti status) ----------
+class MotorButton extends StatelessWidget {
+  final StatusMotor status;
   final VoidCallback? onPressed;
-  final bool enabled;
-  const SewaButton({super.key, this.onPressed, this.enabled = true});
+  const MotorButton({super.key, required this.status, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
+    // Motor yang sedang diperbaiki: tombol hanya penanda, tidak bisa ditekan.
+    final bisaDitekan = status != StatusMotor.perbaikan;
+
     return Material(
-      color: enabled ? AppColors.primary : AppColors.border,
-      borderRadius: BorderRadius.circular(8),
+      color: status.tombolColor,
+      borderRadius: BorderRadius.circular(10),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: enabled ? (onPressed ?? () {}) : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          child: Text(
-            enabled ? 'Sewa Sekarang' : 'Tidak Tersedia',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: enabled ? Colors.white : AppColors.grey,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+        borderRadius: BorderRadius.circular(10),
+        onTap: bisaDitekan ? (onPressed ?? () {}) : null,
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              status.tombolLabel,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
         ),

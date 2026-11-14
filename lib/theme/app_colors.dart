@@ -7,6 +7,20 @@ class AppColors {
   static const border = Color(0xFFD9D9D9);
   static const grey = Color(0xFF8C8C8C);
 
+  // ---- Warna status motor (Katalog Produk) ----
+  static const statusTersedia = Color(0xFF019D70); // badge & tombol Tersedia
+  static const statusDisewa = Color(0xFFBC1A1D); // badge & tombol Disewa
+  static const statusPerbaikan = Color(0xFFF59E0B); // badge & chip Perbaikan
+  static const statusPerbaikanTombol = Color(0xFFC48417); // tombol Perbaikan
+  static const chipTersedia = Color(0xFF00684A); // latar chip Tersedia
+  static const chipDisewa = Color(0xFF780406); // latar chip Disewa
+
+  // ---- Warna teks & garis kartu motor ----
+  static const textTitle = Color(0xFF111827);
+  static const textMuted = Color(0xFF6B7280);
+  static const textFaint = Color(0xFF9CA3AF);
+  static const cardBorder = Color(0xFFE5E7EB);
+
   // Warna halaman Setting
   static const background = Color(0xFFF2F5F4);
   static const avatarBg = Color(0xFFDCEEEA);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'models/motor.dart';
 import 'theme/app_colors.dart';
 import 'widgets/motor_cards.dart';
 import 'widgets/navbar.dart';
+import 'widgets/status_filter_chip.dart';
 import 'widgets/topbar.dart';
 
 class ProdukScreen extends StatefulWidget {
@@ -14,132 +16,91 @@ class ProdukScreen extends StatefulWidget {
 }
 
 class _ProdukScreenState extends State<ProdukScreen> {
-  String _searchText = '';
+  // null = tampilkan semua motor
+  StatusMotor? _filter;
+
+  int _hitung(StatusMotor status) =>
+      dataMotor.where((m) => m.status == status).length;
+
+  // Klik chip = tampilkan motor dengan status itu saja.
+  // Klik chip yang sama lagi = kembali menampilkan semua.
+  void _pilih(StatusMotor status) {
+    HapticFeedback.selectionClick();
+    setState(() => _filter = _filter == status ? null : status);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final query = _searchText.toLowerCase();
-    final motorFiltered = dataMotor.where((motor) {
-      return motor.nama.toLowerCase().contains(query) ||
-          motor.platNo.toLowerCase().contains(query);
-    }).toList();
-    final jumlahTersedia =
-        dataMotor.where((m) => m.status == StatusMotor.tersedia).length;
-    final jumlahDisewa =
-        dataMotor.where((m) => m.status == StatusMotor.disewa).length;
+    final daftar = _filter == null
+        ? dataMotor
+        : dataMotor.where((m) => m.status == _filter).toList();
 
     return Scaffold(
       appBar: const RyokouTopBar(title: 'KATALOG PRODUK'),
       bottomNavigationBar: const RyokouNavBar(current: NavTab.produk),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.search, color: AppColors.grey, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) => setState(() => _searchText = value),
-                      decoration: const InputDecoration(
-                        hintText: 'Cari merek atau tipe motor',
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.grey,
-                        ),
-                        border: InputBorder.none,
-                      ),
+      body: Column(
+        children: [
+          // Chip filter (bisa digeser ke samping kalau layarnya sempit)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+            child: Row(
+              children: [
+                for (final status in StatusMotor.values)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: StatusFilterChip(
+                      status: status,
+                      count: _hitung(status),
+                      selected: _filter == status,
+                      onTap: () => _pilih(status),
                     ),
                   ),
-                  const Icon(Icons.keyboard_arrow_down, color: Colors.black54),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Chip status (Wrap: turun ke baris bawah kalau layar sempit)
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: [
-                StatusChip(
-                  icon: Icons.check_circle_outline,
-                  label: 'Motor Yang Tersedia',
-                  count: jumlahTersedia,
-                ),
-                StatusChip(
-                  icon: Icons.access_time,
-                  label: 'Motor Sedang Disewa',
-                  count: jumlahDisewa,
-                ),
               ],
             ),
-            const SizedBox(height: 12),
+          ),
 
-            // Grid motor
-            Expanded(
-              child: motorFiltered.isEmpty
-                  ? const Center(child: Text('Motor tidak ditemukan'))
+          // Daftar motor (berganti dengan efek fade saat filter berubah)
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: daftar.isEmpty
+                  ? const _KosongState(key: ValueKey('kosong'))
                   : GridView.builder(
-                      itemCount: motorFiltered.length,
+                      key: ValueKey(_filter),
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      itemCount: daftar.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 12,
                             mainAxisSpacing: 12,
-                            mainAxisExtent: 300, // tinggi tiap kartu
+                            mainAxisExtent: 306, // tinggi tiap kartu
                           ),
-                      itemBuilder: (_, i) =>
-                          MotorGridCard(motor: motorFiltered[i]),
+                      itemBuilder: (_, i) => MotorGridCard(motor: daftar[i]),
                     ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class StatusChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final int count;
-  const StatusChip({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.count,
-  });
+class _KosongState extends StatelessWidget {
+  const _KosongState({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
+    return const Center(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: Colors.white),
-          const SizedBox(width: 5),
+          Icon(Icons.two_wheeler, size: 48, color: AppColors.border),
+          SizedBox(height: 8),
           Text(
-            '$label  $count',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-            ),
+            'Belum ada motor dengan status ini',
+            style: TextStyle(fontSize: 13, color: AppColors.textMuted),
           ),
         ],
       ),
