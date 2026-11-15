@@ -33,7 +33,9 @@ class AppColors {
   // ---- Halaman Profil ----
   static const pageBg = Color(0xFFF9F9FA); // latar halaman
   static const cardSoft = Color(0xFFF3F4F4); // latar kartu
-  static const tileGrey = Color(0xFFE7E8E9); // kotak "Status Sewa" (belum menyewa)
+  static const tileGrey = Color(
+    0xFFE7E8E9,
+  ); // kotak "Status Sewa" (belum menyewa)
   static const tuneBg = Color(0xFFEDEEEF); // tombol ubah profil
   static const profilText = Color(0xFF1A1C1D);
   static const profilSubtext = Color(0xFF40484B);
@@ -42,4 +44,6 @@ class AppColors {
   static const csIcon = Color(0xFF34D399); // icon Customer Service
   static const logout = Color(0xFFBA1A1A); // teks "Keluar Akun"
   static const avatarGrey = Color(0xFFA5A5A5);
+  static const tombolNonaktif = Color(0xFFE2E8F0); // tombol "Sedang Diperbaiki"
+  static const tombolNonaktifText = Color(0xFF64748B);
 }

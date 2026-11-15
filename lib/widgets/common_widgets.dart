@@ -161,8 +161,8 @@ class MotorButton extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               status.tombolLabel,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: status.tombolTextColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.5,

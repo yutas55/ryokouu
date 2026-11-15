@@ -15,7 +15,13 @@ extension StatusMotorStyle on StatusMotor {
   Color get tombolColor => switch (this) {
     StatusMotor.tersedia => AppColors.statusTersedia,
     StatusMotor.disewa => AppColors.statusDisewa,
-    StatusMotor.perbaikan => AppColors.statusPerbaikanTombol,
+    StatusMotor.perbaikan => AppColors.tombolNonaktif,
+  };
+
+  /// Warna teks tombol di kartu motor.
+  Color get tombolTextColor => switch (this) {
+    StatusMotor.perbaikan => AppColors.tombolNonaktifText,
+    _ => Colors.white,
   };
 
   /// Teks tombol di kartu motor.
