@@ -29,4 +29,17 @@ class AppColors {
   static const hint = Color(0xFF9AA3A1);
   static const divider = Color(0xFFEEF1F0);
   static const shadow = Color(0x0A000000); // bayangan kartu (hitam 4%)
+
+  // ---- Halaman Profil ----
+  static const pageBg = Color(0xFFF9F9FA); // latar halaman
+  static const cardSoft = Color(0xFFF3F4F4); // latar kartu
+  static const tileGrey = Color(0xFFE7E8E9); // kotak "Status Sewa" (belum menyewa)
+  static const tuneBg = Color(0xFFEDEEEF); // tombol ubah profil
+  static const profilText = Color(0xFF1A1C1D);
+  static const profilSubtext = Color(0xFF40484B);
+  static const iconOnPrimary = Color(0xFFC2E9F4); // icon di bulatan hijau tua
+  static const chevron = Color(0xFF002F38);
+  static const csIcon = Color(0xFF34D399); // icon Customer Service
+  static const logout = Color(0xFFBA1A1A); // teks "Keluar Akun"
+  static const avatarGrey = Color(0xFFA5A5A5);
 }

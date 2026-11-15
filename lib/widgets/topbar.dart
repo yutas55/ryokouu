@@ -15,7 +15,7 @@ class RyokouTopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final sedangDiSetting =
-        ModalRoute.of(context)?.settings.name == NavTab.setting.route;
+        ModalRoute.of(context)?.settings.name == NavTab.profil.route;
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -61,7 +61,7 @@ class RyokouTopBar extends StatelessWidget implements PreferredSizeWidget {
                 ? null
                 : () =>
                       Navigator.of(context)
-                          .pushReplacementNamed(NavTab.setting.route),
+                          .pushReplacementNamed(NavTab.profil.route),
             child: Container(
               width: 36,
               height: 36,

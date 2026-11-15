@@ -7,7 +7,7 @@ import '../theme/app_colors.dart';
 enum NavTab {
   beranda('/beranda', 'Beranda', 'assets/icons/home.svg'),
   produk('/produk', 'Produk', 'assets/icons/motor.svg'),
-  setting('/setting', 'Setting', 'assets/icons/settings.svg');
+  profil('/profil', 'Profil', 'assest/icons/profil.svg');
 
   final String route;
   final String label;
