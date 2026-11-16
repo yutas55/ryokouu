@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'informasi_denda_screen.dart';
 import 'data/status_pengguna.dart';
 import 'profile_screen.dart';
 import 'theme/app_colors.dart';
@@ -485,7 +486,7 @@ class ProfilScreen extends StatelessWidget {
     final Color warna;
     final VoidCallback onTap;
 
-    if (punyaDenda) {
+        if (punyaDenda) {
       teks = 'Anda Memiliki\nDenda';
       warna = AppColors.statusDisewa;
       onTap = () => _bukaDetailDenda(context);
@@ -550,9 +551,10 @@ class ProfilScreen extends StatelessWidget {
             icon: Icons.contact_support_outlined,
             judul: 'Informasi Denda',
             subjudul: 'Pelajari tentang denda pada Rental Ryokou',
-            onTap: () => _belumTersedia(
-              context,
-              'Halaman informasi denda belum tersedia',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const InformasiDendaScreen(),
+              ),
             ),
           ),
           _baris(
