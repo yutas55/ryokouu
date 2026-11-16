@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'detail_denda_screen.dart';
 import 'informasi_denda_screen.dart';
 import 'data/status_pengguna.dart';
 import 'profile_screen.dart';
@@ -8,16 +9,10 @@ import 'theme/app_colors.dart';
 import 'widgets/navbar.dart';
 import 'widgets/topbar.dart';
 
-/// Halaman tab Profil. Isinya berubah otomatis mengikuti variabel di
-/// lib/data/status_pengguna.dart (sewaMotor, dendaKeterlambatan, dll).
 class ProfilScreen extends StatelessWidget {
   const ProfilScreen({super.key});
-
   static const _noCs = '08123456789';
   static const _versiApp = '2.4.1';
-
-  // ---------- Aksi ----------
-
   void _belumTersedia(BuildContext context, String pesan) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pesan)));
   }
@@ -29,65 +24,10 @@ class ProfilScreen extends StatelessWidget {
     );
   }
 
+  // Buka halaman Detail Denda (rincian + bukti tiap jenis denda)
   void _bukaDetailDenda(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Detail Denda',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.profilText,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                punyaDenda
-                    ? 'Kamu memiliki $jumlahDenda denda:'
-                    : 'Kamu tidak memiliki denda.',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.profilSubtext,
-                ),
-              ),
-              const SizedBox(height: 12),
-              for (final denda in daftarDenda)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.error_outline_rounded,
-                        size: 20,
-                        color: AppColors.statusDisewa,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        denda,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.profilText,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const DetailDendaScreen()),
     );
   }
 
@@ -486,7 +426,7 @@ class ProfilScreen extends StatelessWidget {
     final Color warna;
     final VoidCallback onTap;
 
-        if (punyaDenda) {
+    if (punyaDenda) {
       teks = 'Anda Memiliki\nDenda';
       warna = AppColors.statusDisewa;
       onTap = () => _bukaDetailDenda(context);
