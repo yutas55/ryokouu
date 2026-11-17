@@ -12,9 +12,14 @@ import 'widgets/topbar.dart';
 
 /// Halaman tab Profil. Isinya berubah otomatis mengikuti variabel di
 /// lib/data/status_pengguna.dart (sewaMotor, dendaKeterlambatan, dll).
-class ProfilScreen extends StatelessWidget {
+class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
 
+  @override
+  State<ProfilScreen> createState() => _ProfilScreenState();
+}
+
+class _ProfilScreenState extends State<ProfilScreen> {
   static const _versiApp = '2.4.1';
 
   // ---------- Aksi ----------
@@ -24,10 +29,13 @@ class ProfilScreen extends StatelessWidget {
   }
 
   // Icon ubah profil -> halaman form data diri (ProfileScreen)
+    // Icon ubah profil -> halaman form data diri (ProfileScreen)
   void _bukaEditProfil(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => const ProfileScreen()))
+        .then((_) {
+          if (mounted) setState(() {});
+        });
   }
 
   // Buka halaman Detail Denda (rincian + bukti tiap jenis denda)
