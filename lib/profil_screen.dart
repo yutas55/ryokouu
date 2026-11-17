@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'riwayat_screen.dart';
 import 'detail_denda_screen.dart';
 import 'informasi_denda_screen.dart';
 import 'data/status_pengguna.dart';
@@ -9,10 +10,15 @@ import 'theme/app_colors.dart';
 import 'widgets/navbar.dart';
 import 'widgets/topbar.dart';
 
+/// Halaman tab Profil. Isinya berubah otomatis mengikuti variabel di
+/// lib/data/status_pengguna.dart (sewaMotor, dendaKeterlambatan, dll).
 class ProfilScreen extends StatelessWidget {
   const ProfilScreen({super.key});
-  static const _noCs = '08123456789';
+
   static const _versiApp = '2.4.1';
+
+  // ---------- Aksi ----------
+
   void _belumTersedia(BuildContext context, String pesan) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pesan)));
   }
@@ -72,13 +78,10 @@ class ProfilScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _kartuProfil(context),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
 
-            _judul('Denda'),
-            _kartuDenda(context),
-            const SizedBox(height: 24),
-
-            _judul('Informasi Aplikasi'),
+            // ---- Setting & Bantuan ----
+            _judul('Setting & Bantuan'),
             _kartu(
               child: Column(
                 children: [
@@ -93,32 +96,36 @@ class ProfilScreen extends StatelessWidget {
                   ),
                   _baris(
                     icon: Icons.contact_support_outlined,
-                    judul: 'FAQ',
-                    subjudul: 'Pertanyaan yang diajukan',
-                    onTap: () =>
-                        _belumTersedia(context, 'Halaman FAQ belum tersedia'),
+                    judul: 'Bantuan',
+                    subjudul: 'Beri laporan, atau lainnya',
+                    onTap: () => _belumTersedia(
+                      context,
+                      'Halaman Bantuan belum tersedia',
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
 
-            _judul('Tentang RYOKOU'),
-            _kartu(
+            // ---- Riwayat & Denda ----
+            _judul('Riwayat & Denda'),
+            _kartuDenda(context),
+            const SizedBox(height: 6),
+                        _kartu(
               child: _baris(
-                icon: Icons.info_outline_rounded,
-                judul: 'Informasi RYOKOU',
-                subjudul: 'Penjelasan',
-                onTap: () => _belumTersedia(
-                  context,
-                  'Halaman Informasi RYOKOU belum tersedia',
+                icon: Icons.schedule_outlined,
+                judul: 'Riwayat',
+                subjudul: 'Riwayat Pemesanan, dll',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const RiwayatScreen(),
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 40),
 
-            _bannerCs(),
-            const SizedBox(height: 24),
             _footer(context),
           ],
         ),
@@ -175,8 +182,10 @@ class ProfilScreen extends StatelessWidget {
   }
 
   /// Satu baris menu: bulatan icon + judul + keterangan + panah.
+  /// [iconWidget] opsional, dipakai kalau icon-nya perlu dibuat khusus.
   Widget _baris({
-    required IconData icon,
+    IconData? icon,
+    Widget? iconWidget,
     required String judul,
     required String subjudul,
     required VoidCallback onTap,
@@ -195,7 +204,9 @@ class ProfilScreen extends StatelessWidget {
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 22, color: AppColors.iconOnPrimary),
+              child:
+                  iconWidget ??
+                  Icon(icon, size: 22, color: AppColors.iconOnPrimary),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -483,6 +494,42 @@ class ProfilScreen extends StatelessWidget {
 
   // ---------- Denda ----------
 
+  /// Icon uang dengan tanda seru kecil di pojok kanan bawah (Detail Denda).
+  Widget _iconDetailDenda() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        const Icon(
+          Icons.payments_outlined,
+          size: 22,
+          color: AppColors.iconOnPrimary,
+        ),
+        Positioned(
+          right: 7,
+          bottom: 8,
+          child: Container(
+            width: 10,
+            height: 10,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: AppColors.primary,
+              shape: BoxShape.circle,
+            ),
+            child: const Text(
+              '!',
+              style: TextStyle(
+                fontSize: 8,
+                height: 1,
+                fontWeight: FontWeight.w900,
+                color: AppColors.iconOnPrimary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _kartuDenda(BuildContext context) {
     final kartu = _kartu(
       child: Column(
@@ -490,7 +537,7 @@ class ProfilScreen extends StatelessWidget {
           _baris(
             icon: Icons.contact_support_outlined,
             judul: 'Informasi Denda',
-            subjudul: 'Pelajari tentang denda pada Rental Ryokou',
+            subjudul: 'Pelajari tentang denda pada Rental RYOKOU',
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) => const InformasiDendaScreen(),
@@ -498,7 +545,7 @@ class ProfilScreen extends StatelessWidget {
             ),
           ),
           _baris(
-            icon: Icons.payments_outlined,
+            iconWidget: _iconDetailDenda(),
             judul: 'Detail Denda',
             subjudul: punyaDenda
                 ? 'Memiliki $jumlahDenda Denda'
@@ -511,7 +558,7 @@ class ProfilScreen extends StatelessWidget {
 
     if (!punyaDenda) return kartu;
 
-    // Tanda seru merah di pojok kanan atas kartu Denda
+    // Tanda seru merah di pojok kanan atas kartu Denda (hanya kalau ada denda)
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -530,43 +577,6 @@ class ProfilScreen extends StatelessWidget {
   }
 
   // ---------- Bawah halaman ----------
-
-  Widget _bannerCs() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Row(
-        children: [
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                style: TextStyle(
-                  fontSize: 12.5,
-                  height: 1.4,
-                  color: Colors.white,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Jika mempunyai kendala, bisa hubungi '
-                        'Customer Service pada ',
-                  ),
-                  TextSpan(
-                    text: _noCs,
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 12),
-          Icon(Icons.support_agent_rounded, size: 32, color: AppColors.csIcon),
-        ],
-      ),
-    );
-  }
 
   Widget _footer(BuildContext context) {
     return Column(
