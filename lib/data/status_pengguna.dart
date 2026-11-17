@@ -4,6 +4,7 @@ String noHpPengguna = '+62812-3456-7890';
 String emailPengguna = "sigma@email.com";
 String kataSandiPengguna = "sigma123456";
 
+
 // true  -> kotak hijau "Sedang Menyewa <motor>" + tombol "Lihat Detail Penyewaan"
 // false -> kotak abu-abu "Belum Menyewa Motor" + tombol "Sewa Sekarang!"
 bool sewaMotor = false;
