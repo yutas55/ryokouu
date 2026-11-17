@@ -1079,12 +1079,16 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
 
   // ---------- Bawah halaman ----------
 
-  Widget _kosong() {
+    Widget _kosong() {
     return _kartuPutih(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 28),
       child: const Column(
         children: [
-          Icon(Icons.check_circle_outline_rounded, size: 52, color: AppColors.statusTersedia),
+          Icon(
+            Icons.check_circle_outline_rounded,
+            size: 44,
+            color: AppColors.statusTersedia,
+          ),
           SizedBox(height: 12),
           Text(
             'Kamu tidak memiliki denda',
@@ -1106,7 +1110,23 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
   }
 
   /// Kotak abu-abu imbauan + tombol "Pelajari tentang denda pada Ryokou".
+  /// Teksnya berbeda kalau user punya denda atau tidak.
   Widget _kartuImbauan() {
+    final judul = punyaDenda
+        ? 'KAMI MEMINTA KEPADA ANDA AGAR CEPAT MELUNASI DENDA '
+              'UNTUK KEPENTINGAN BERSAMA'
+        : 'KAMI MEMINTA ANDA UNTUK TIDAK MELANGGAR BEBERAPA ATURAN '
+              'SAAT SEDANG MENYEWA MOTOR DARI RYOKOU AGAR TIDAK '
+              'MENDAPATKAN DENDA';
+
+    final isi = punyaDenda
+        ? 'Tidak membayar DENDA dapat menonaktifkan akun sewa sementara '
+              'serta membatasi hak pemesanan unit RYOKOU di kemudian hari, '
+              'ataupun penahanan terhadap jaminan yang diberikan.'
+        : 'jika anda terkena DENDA maka akan ada pembatasan hak pemesanan '
+              'unit RYOKOU di kemudian hari, ataupun penahanan terhadap '
+              'jaminan yang diberikan.';
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1116,19 +1136,22 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Row(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.info_outline_rounded, size: 24, color: AppColors.primary),
-              SizedBox(width: 12),
+              const Icon(
+                Icons.info_outline_rounded,
+                size: 24,
+                color: AppColors.primary,
+              ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'KAMI MEMINTA KEPADA ANDA AGAR CEPAT MELUNASI '
-                            'DENDA UNTUK KEPENTINGAN BERSAMA\n',
-                        style: TextStyle(
+                        text: '$judul\n',
+                        style: const TextStyle(
                           fontSize: 15,
                           height: 1.35,
                           fontWeight: FontWeight.w800,
@@ -1136,11 +1159,8 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
                         ),
                       ),
                       TextSpan(
-                        text: 'Tidak membayar DENDA dapat menonaktifkan akun '
-                            'sewa sementara serta membatasi hak pemesanan '
-                            'unit RYOKOU di kemudian hari, ataupun '
-                            'penahanterhadap jaminan yang diberikan.',
-                        style: TextStyle(
+                        text: isi,
+                        style: const TextStyle(
                           fontSize: 13,
                           height: 1.4,
                           color: _teksAbu,
@@ -1163,7 +1183,11 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                 child: Row(
                   children: [
-                    Icon(Icons.menu_book_outlined, size: 22, color: AppColors.primary),
+                    Icon(
+                      Icons.menu_book_outlined,
+                      size: 22,
+                      color: AppColors.primary,
+                    ),
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -1177,7 +1201,11 @@ class _DetailDendaScreenState extends State<DetailDendaScreen> {
                         ),
                       ),
                     ),
-                    Icon(Icons.chevron_right_rounded, size: 22, color: AppColors.grey),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 22,
+                      color: AppColors.grey,
+                    ),
                   ],
                 ),
               ),
