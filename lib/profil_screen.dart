@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'riwayat_screen.dart';
 import 'detail_denda_screen.dart';
 import 'informasi_denda_screen.dart';
 import 'data/status_pengguna.dart';
@@ -111,14 +112,15 @@ class ProfilScreen extends StatelessWidget {
             _judul('Riwayat & Denda'),
             _kartuDenda(context),
             const SizedBox(height: 6),
-            _kartu(
+                        _kartu(
               child: _baris(
                 icon: Icons.schedule_outlined,
-                judul: 'Riwayat RYOKOU',
+                judul: 'Riwayat',
                 subjudul: 'Riwayat Pemesanan, dll',
-                onTap: () => _belumTersedia(
-                  context,
-                  'Halaman Riwayat belum tersedia',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const RiwayatScreen(),
+                  ),
                 ),
               ),
             ),
