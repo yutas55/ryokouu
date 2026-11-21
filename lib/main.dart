@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:ryokou/bahasa.dart';
 
 import 'beranda_screen.dart';
 import 'produk_screen.dart';
@@ -9,8 +10,30 @@ import 'widgets/navbar.dart';
 
 void main() => runApp(const RyokouApp());
 
-class RyokouApp extends StatelessWidget {
+class RyokouApp extends StatefulWidget {
   const RyokouApp({super.key});
+
+  @override
+  State<RyokouApp> createState() => _RyokouAppState();
+}
+
+class _RyokouAppState extends State<RyokouApp> {
+  @override
+  void initState() {
+    super.initState();
+    bahasaAktif.addListener(_bahasaBerubah);
+  }
+
+  @override
+  void dispose() {
+    bahasaAktif.removeListener(_bahasaBerubah);
+    super.dispose();
+  }
+
+  
+  void _bahasaBerubah() {
+    if (mounted) bangunUlangSemua(context);
+  }
 
   @override
   Widget build(BuildContext context) {
