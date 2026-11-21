@@ -32,11 +32,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
     orElse: () => dataMotor.first,
   );
 
-  // ---------- Aksi ----------
-  void _belumTersedia(BuildContext context, String pesan) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pesan)));
-  }
-
   void _buka(BuildContext context, Widget halaman) {
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => halaman));
   }
