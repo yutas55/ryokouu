@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'riwayat_screen.dart';
+import 'bantuan_screen.dart';
+import 'data/status_pengguna.dart';
 import 'detail_denda_screen.dart';
 import 'informasi_denda_screen.dart';
-import 'data/status_pengguna.dart';
 import 'profile_screen.dart';
+import 'riwayat_screen.dart';
+import 'setting_screen.dart';
 import 'theme/app_colors.dart';
 import 'widgets/navbar.dart';
 import 'widgets/topbar.dart';
@@ -28,21 +30,18 @@ class _ProfilScreenState extends State<ProfilScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pesan)));
   }
 
-  // Icon ubah profil -> halaman form data diri (ProfileScreen)
-    // Icon ubah profil -> halaman form data diri (ProfileScreen)
+  void _buka(BuildContext context, Widget halaman) {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => halaman));
+  }
+
+  // Icon ubah profil -> form data diri. Setelah kembali, kartu profil
+  // dimuat ulang supaya nama/nomor yang baru langsung tampil.
   void _bukaEditProfil(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (_) => const ProfileScreen()))
         .then((_) {
           if (mounted) setState(() {});
         });
-  }
-
-  // Buka halaman Detail Denda (rincian + bukti tiap jenis denda)
-  void _bukaDetailDenda(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const DetailDendaScreen()),
-    );
   }
 
   Future<void> _konfirmasiKeluar(BuildContext context) async {
@@ -97,41 +96,22 @@ class _ProfilScreenState extends State<ProfilScreen> {
                     icon: Icons.settings_outlined,
                     judul: 'Setting',
                     subjudul: 'Setting Tema Aplikasi, dll',
-                    onTap: () => _belumTersedia(
-                      context,
-                      'Halaman Setting belum tersedia',
-                    ),
+                    onTap: () => _buka(context, const SettingScreen()),
                   ),
                   _baris(
                     icon: Icons.contact_support_outlined,
                     judul: 'Bantuan',
                     subjudul: 'Beri laporan, atau lainnya',
-                    onTap: () => _belumTersedia(
-                      context,
-                      'Halaman Bantuan belum tersedia',
-                    ),
+                    onTap: () => _buka(context, const BantuanScreen()),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 32),
 
-            // ---- Riwayat & Denda ----
+            // ---- Riwayat & Denda (satu kartu, tiga baris sama rata) ----
             _judul('Riwayat & Denda'),
             _kartuDenda(context),
-            const SizedBox(height: 6),
-                        _kartu(
-              child: _baris(
-                icon: Icons.schedule_outlined,
-                judul: 'Riwayat',
-                subjudul: 'Riwayat Pemesanan, dll',
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const RiwayatScreen(),
-                  ),
-                ),
-              ),
-            ),
             const SizedBox(height: 40),
 
             _footer(context),
@@ -448,7 +428,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     if (punyaDenda) {
       teks = 'Anda Memiliki\nDenda';
       warna = AppColors.statusDisewa;
-      onTap = () => _bukaDetailDenda(context);
+      onTap = () => _buka(context, const DetailDendaScreen());
     } else if (sewaMotor) {
       teks = 'Lihat Detail\nPenyewaan';
       warna = AppColors.primary;
@@ -500,7 +480,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     );
   }
 
-  // ---------- Denda ----------
+  // ---------- Riwayat & Denda ----------
 
   /// Icon uang dengan tanda seru kecil di pojok kanan bawah (Detail Denda).
   Widget _iconDetailDenda() {
@@ -538,6 +518,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
     );
   }
 
+  /// Satu kartu berisi tiga baris: Informasi Denda, Detail Denda, Riwayat.
   Widget _kartuDenda(BuildContext context) {
     final kartu = _kartu(
       child: Column(
@@ -546,11 +527,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
             icon: Icons.contact_support_outlined,
             judul: 'Informasi Denda',
             subjudul: 'Pelajari tentang denda pada Rental RYOKOU',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const InformasiDendaScreen(),
-              ),
-            ),
+            onTap: () => _buka(context, const InformasiDendaScreen()),
           ),
           _baris(
             iconWidget: _iconDetailDenda(),
@@ -558,7 +535,13 @@ class _ProfilScreenState extends State<ProfilScreen> {
             subjudul: punyaDenda
                 ? 'Memiliki $jumlahDenda Denda'
                 : 'Tidak Memiliki',
-            onTap: () => _bukaDetailDenda(context),
+            onTap: () => _buka(context, const DetailDendaScreen()),
+          ),
+          _baris(
+            icon: Icons.schedule_outlined,
+            judul: 'Riwayat',
+            subjudul: 'Riwayat Pemesanan, dll',
+            onTap: () => _buka(context, const RiwayatScreen()),
           ),
         ],
       ),
@@ -566,7 +549,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
     if (!punyaDenda) return kartu;
 
-    // Tanda seru merah di pojok kanan atas kartu Denda (hanya kalau ada denda)
+    // Tanda seru merah di pojok kanan atas kartu (hanya kalau ada denda)
     return Stack(
       clipBehavior: Clip.none,
       children: [
