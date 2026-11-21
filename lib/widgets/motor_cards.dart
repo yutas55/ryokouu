@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Text;
 import 'package:ryokou/bahasa.dart';
 
+import '../detail_motor_screen.dart';
 import '../models/motor.dart';
 import '../theme/app_colors.dart';
 import 'common_widgets.dart';
@@ -64,56 +65,63 @@ class MotorListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: _dekorasiKartu(),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 104,
-            height: 96,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AssetImg(motor.image, width: 104, height: 96),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: BadgeStatus(status: motor.status),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  motor.nama,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textTitle,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => bukaDetailMotor(context, motor),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: _dekorasiKartu(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 104,
+              height: 96,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: AssetImg(motor.image, width: 104, height: 96),
                   ),
-                ),
-                const SizedBox(height: 4),
-                SpecRow(motor: motor),
-                const SizedBox(height: 8),
-                _Harga(harga: motor.hargaSewaPerHari, ukuran: 16),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: MotorButton(status: motor.status),
-                ),
-              ],
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: BadgeStatus(status: motor.status),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    motor.nama,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textTitle,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  SpecRow(motor: motor),
+                  const SizedBox(height: 8),
+                  _Harga(harga: motor.hargaSewaPerHari, ukuran: 16),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: MotorButton(
+                      status: motor.status,
+                      onPressed: () => bukaDetailMotor(context, motor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -126,50 +134,57 @@ class MotorGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: _dekorasiKartu(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Gambar motor + badge status di pojok kiri atas
-          Stack(
-            children: [
-              AssetImg(motor.image, width: double.infinity, height: 110),
-              Positioned(
-                top: 0,
-                left: 0,
-                child: BadgeStatus(status: motor.status),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            motor.nama,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textTitle,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => bukaDetailMotor(context, motor),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: _dekorasiKartu(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Gambar motor + badge status di pojok kiri atas
+            Stack(
+              children: [
+                AssetImg(motor.image, width: double.infinity, height: 110),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: BadgeStatus(status: motor.status),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 4),
-          SpecRow(motor: motor),
-          const SizedBox(height: 10),
-          const Text(
-            'Tarif Sewa',
-            style: TextStyle(fontSize: 11, color: AppColors.textFaint),
-          ),
-          const SizedBox(height: 2),
-          _Harga(harga: motor.hargaSewaPerHari, ukuran: 18),
-          const SizedBox(height: 8),
-          const Spacer(),
-          SizedBox(
-            width: double.infinity,
-            child: MotorButton(status: motor.status),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Text(
+              motor.nama,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textTitle,
+              ),
+            ),
+            const SizedBox(height: 4),
+            SpecRow(motor: motor),
+            const SizedBox(height: 10),
+            const Text(
+              'Tarif Sewa',
+              style: TextStyle(fontSize: 11, color: AppColors.textFaint),
+            ),
+            const SizedBox(height: 2),
+            _Harga(harga: motor.hargaSewaPerHari, ukuran: 18),
+            const SizedBox(height: 8),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: MotorButton(
+                status: motor.status,
+                onPressed: () => bukaDetailMotor(context, motor),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

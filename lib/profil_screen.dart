@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ryokou/bahasa.dart';
 
 import 'bantuan_screen.dart';
+import 'detail_motor_screen.dart';
 import 'data/status_pengguna.dart';
 import 'detail_denda_screen.dart';
 import 'informasi_denda_screen.dart';
@@ -12,6 +13,7 @@ import 'setting_screen.dart';
 import 'theme/app_colors.dart';
 import 'widgets/navbar.dart';
 import 'widgets/topbar.dart';
+import 'models/motor.dart';
 
 /// Halaman tab Profil. Isinya berubah otomatis mengikuti variabel di
 /// lib/data/status_pengguna.dart (sewaMotor, dendaKeterlambatan, dll).
@@ -24,9 +26,13 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreenState extends State<ProfilScreen> {
   static const _versiApp = '2.4.1';
+    // Motor yang sedang disewa user (dicocokkan dengan nama/model di dataMotor).
+  Motor _motorDisewa() => dataMotor.firstWhere(
+    (m) => m.model == motorYangDisewa || m.nama == motorYangDisewa,
+    orElse: () => dataMotor.first,
+  );
 
   // ---------- Aksi ----------
-
   void _belumTersedia(BuildContext context, String pesan) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(pesan)));
   }
@@ -433,9 +439,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
     } else if (sewaMotor) {
       teks = 'Lihat Detail\nPenyewaan';
       warna = AppColors.primary;
-      onTap = () => _belumTersedia(
+      onTap = () => bukaDetailMotor(
         context,
-        'Halaman detail penyewaan belum tersedia',
+        _motorDisewa(),
+        status: StatusMotor.disewa,
       );
     } else {
       teks = 'Sewa\nSekarang!';
