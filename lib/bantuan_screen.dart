@@ -187,17 +187,54 @@ const List<_Topik> _daftarTopik = [
   ),
 ];
 
-/// Semua artikel dari semua topik (dipakai untuk pencarian & halaman FAQ).
-final List<_Artikel> _semuaArtikel = [
-  for (final t in _daftarTopik) ...t.artikel,
-];
+// =====================================================================
+//  DAFTAR FAQ
+//  kalo mau nambah cukup tambah satu blok _Artikel(...) di
+//  dalam daftar di bawah. Kotak, ikon, panah, dan jawabannya otomatis.
+// =====================================================================
 
-/// Pertanyaan populer yang tampil di halaman utama Bantuan.
-final List<_Artikel> _faqPopuler = [
-  _daftarTopik[3].artikel[0], // Pembayaran apa saja yang tersedia?
-  _daftarTopik[0].artikel[0], // Apa saja syarat menyewa motor?
-  _daftarTopik[2].artikel[1], // Apa itu denda keterlambatan?
-  _daftarTopik[2].artikel[3], // Di mana melihat dan membayar denda?
+/// Jumlah pertanyaan yang tampil di halaman utama Bantuan.
+/// Sisanya muncul saat menekan tulisan "FAQ RYOKOU".
+const int _jumlahFaqDiBeranda = 4;
+
+const List<_Artikel> _daftarFaq = [
+  _Artikel(
+    'Pembayaran apa saja yang tersedia?',
+    'Kamu bisa membayar lewat QRIS atau Transfer bank. Pilih metode '
+        'yang kamu inginkan saat melakukan pembayaran.',
+    icon: Icons.account_balance_wallet_outlined,
+  ),
+  _Artikel(
+    'Apa saja syarat menyewa motor?',
+    'Kamu perlu KTP dan SIM C yang masih berlaku. Data diri juga harus '
+        'dilengkapi di Form Data Diri sebelum memesan unit.',
+    icon: Icons.badge_outlined,
+  ),
+  _Artikel(
+    'Apa itu denda keterlambatan?',
+    'Jika unit tiba setelah waktu jatuh tempo, sistem mencatat denda '
+        'keterlambatan sesuai lama keterlambatannya.',
+    icon: Icons.timer_off_outlined,
+  ),
+  _Artikel(
+    'Di mana melihat dan membayar denda?',
+    'Buka Profil lalu pilih Detail Denda. Di sana ada rincian dan bukti '
+        'tiap denda, serta tombol Bayar Denda Sekarang.',
+    icon: Icons.receipt_long_outlined,
+  ),
+  _Artikel(
+    'Bisakah saya memperpanjang masa sewa?',
+    'Perpanjangan bisa diajukan selama unit belum melewati batas waktu '
+        'sewa. Hubungi Customer Service untuk prosesnya.',
+    icon: Icons.update_rounded,
+  ),
+
+  // ▼▼▼ TAMBAH FAQ BARU DI BAWAH INI (salin 5 baris ini, lalu isi) ▼▼▼
+  // _Artikel(
+  //   'Tulis pertanyaannya di sini?',
+  //   'Tulis jawabannya di sini.',
+  //   icon: Icons.help_outline_rounded, // boleh dihapus, ikon otomatis "?"
+  // ),
 ];
 
 // =====================================================================
@@ -224,20 +261,33 @@ class _BantuanScreenState extends State<BantuanScreen> {
   String get _q => _cari.text.trim().toLowerCase();
 
   /// Artikel yang cocok dengan kata kunci + filter topik.
+  /// Artikel yang cocok dengan kata kunci + filter topik.
   List<_Artikel> get _hasil {
     final q = _q;
+
+    bool cocok(_Artikel a, [String namaTopik = '']) =>
+        q.isEmpty ||
+        a.judul.toLowerCase().contains(q) ||
+        a.isi.toLowerCase().contains(q) ||
+        namaTopik.toLowerCase().contains(q);
+
     final sumber = _filterTopik == null
         ? _daftarTopik
         : [_daftarTopik[_filterTopik!]];
-    return [
+
+    final hasil = <_Artikel>[
       for (final t in sumber)
         for (final a in t.artikel)
-          if (q.isEmpty ||
-              a.judul.toLowerCase().contains(q) ||
-              a.isi.toLowerCase().contains(q) ||
-              t.nama.toLowerCase().contains(q))
-            a,
+          if (cocok(a, t.nama)) a,
     ];
+
+    // FAQ ikut dicari (hanya kalau tidak sedang memfilter satu topik).
+    if (_filterTopik == null) {
+      for (final a in _daftarFaq) {
+        if (cocok(a) && !hasil.any((h) => h.judul == a.judul)) hasil.add(a);
+      }
+    }
+    return hasil;
   }
 
   void _bukaTopik(_Topik t) {
@@ -252,7 +302,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) =>
-            _ArtikelScreen(judul: 'FAQ RYOKOU', artikel: _semuaArtikel),
+            _ArtikelScreen(judul: 'FAQ RYOKOU', artikel: _daftarFaq),
       ),
     );
   }
@@ -358,10 +408,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: _TombolKembali(),
-          ),
+          const Align(alignment: Alignment.centerLeft, child: _TombolKembali()),
           const SizedBox(height: 16),
           _kotakCari(),
           if (_filterTopik != null) ...[
@@ -549,7 +596,8 @@ class _BantuanScreenState extends State<BantuanScreen> {
         ),
       ),
       const SizedBox(height: 14),
-      for (final a in _faqPopuler) _KartuTanya(key: ValueKey(a.judul), artikel: a),
+      for (final a in _daftarFaq.take(_jumlahFaqDiBeranda))
+        _KartuTanya(key: ValueKey(a.judul), artikel: a),
     ];
   }
 
@@ -699,7 +747,11 @@ class _BantuanScreenState extends State<BantuanScreen> {
         children: [
           const Row(
             children: [
-              Icon(Icons.support_agent_rounded, size: 30, color: AppColors.csIcon),
+              Icon(
+                Icons.support_agent_rounded,
+                size: 30,
+                color: AppColors.csIcon,
+              ),
               SizedBox(width: 12),
               Expanded(
                 child: Text(
@@ -718,7 +770,10 @@ class _BantuanScreenState extends State<BantuanScreen> {
             TextSpan(
               style: TextStyle(fontSize: 13, height: 1.4, color: Colors.white),
               children: [
-                TextSpan(text: 'Jika mempunyai kendala, hubungi Customer Service pada '),
+                TextSpan(
+                  text:
+                      'Jika mempunyai kendala, hubungi Customer Service pada ',
+                ),
                 TextSpan(
                   text: _noCs,
                   style: TextStyle(fontWeight: FontWeight.w700),
@@ -765,10 +820,7 @@ class _ArtikelScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: _TombolKembali(),
-          ),
+          const Align(alignment: Alignment.centerLeft, child: _TombolKembali()),
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 14),
@@ -780,7 +832,8 @@ class _ArtikelScreen extends StatelessWidget {
               ),
             ),
           ),
-          for (final a in artikel) _KartuTanya(key: ValueKey(a.judul), artikel: a),
+          for (final a in artikel)
+            _KartuTanya(key: ValueKey(a.judul), artikel: a),
         ],
       ),
     );
