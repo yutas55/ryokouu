@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ryokou/bahasa.dart';
 
 import '../models/motor.dart';
 import '../theme/status_style.dart';

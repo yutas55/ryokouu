@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui' show PathMetric;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:ryokou/bahasa.dart';
 
 import 'data/status_pengguna.dart';
 import 'informasi_denda_screen.dart';

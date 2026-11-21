@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:ryokou/bahasa.dart';
 
 import 'models/motor.dart';
 import 'theme/app_colors.dart';
@@ -317,7 +318,10 @@ class InformasiDendaScreen extends StatelessWidget {
       subjudul: 'Tergantung seberapa rusaknya, dan spare partnya',
       isi: Column(
         children: [
-          _barisKerusakan('Lecet / Goresan Ringan', _nilai('Rp 50.000 - 100.000')),
+          _barisKerusakan(
+            'Lecet / Goresan Ringan',
+            _nilai('Rp 50.000 - 100.000'),
+          ),
           const Divider(height: 1, color: _garis),
           _barisKerusakan(
             'Pecah Body / Rusak Sedang',
@@ -403,7 +407,11 @@ class InformasiDendaScreen extends StatelessWidget {
           children: [
             const Text.rich(
               TextSpan(
-                style: TextStyle(fontSize: 13.5, height: 1.5, color: _teksLabel),
+                style: TextStyle(
+                  fontSize: 13.5,
+                  height: 1.5,
+                  color: _teksLabel,
+                ),
                 children: [
                   TextSpan(text: 'Hanya diperbolehkan digunakan pada daerah '),
                   TextSpan(
@@ -464,7 +472,11 @@ class InformasiDendaScreen extends StatelessWidget {
           Expanded(
             child: Text.rich(
               TextSpan(
-                style: TextStyle(fontSize: 14, height: 1.5, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: Colors.white,
+                ),
                 children: [
                   TextSpan(
                     text: 'Hubungi CS Jika Ada Hal Yang Ingin Ditanyakan ',
