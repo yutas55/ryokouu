@@ -1,8 +1,4 @@
 import '../models/motor.dart';
-
-// =====================================================================
-//  DATA TESTING HALAMAN DETAIL MOTOR
-//
 //  STATUS motor (tersedia / disewa / perbaikan) diubah di
 //  lib/models/motor.dart, pada field `status:` tiap motor di dataMotor.
 //  Katalog Produk, Beranda, dan halaman detail otomatis mengikutinya.
@@ -74,9 +70,7 @@ InfoSewaMotor infoUntuk(Motor m) => infoSewaMotor[m.platNo] ?? InfoSewaMotor();
 
 /// Pilihan lokasi di form Pemesanan: (nama chip, alamat lengkap).
 const List<(String, String)> lokasiPopuler = [
-  ('Rental RYOKOU', 'Rental RYOKOU Malang (Pusat)'),
-  ('Stasiun Malang Kota', 'Stasiun Malang Kota'),
-  ('Bandara Abd. Saleh', 'Bandara Abdulrachman Saleh'),
+  ('Rental RYOKOU', 'Rental RYOKOU Malang (Pusat)')
 ];
 
 /// Plat nomor motor yang pengingat ketersediaannya sedang aktif.
