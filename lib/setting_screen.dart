@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:ryokou/bahasa.dart';
 
 import 'theme/app_colors.dart';
 import 'widgets/topbar.dart';
 
 // Pengaturan tersimpan selama aplikasi berjalan (top-level, jadi tidak
 // hilang saat halaman Setting ditutup lalu dibuka lagi).
-String _kodeBahasa = 'ID';
 bool _modeGelap = false;
 bool _pengingatKembali = true;
 
@@ -27,7 +27,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   String get _namaBahasa =>
-      _opsiBahasa.firstWhere((o) => o.$1 == _kodeBahasa).$2;
+      _opsiBahasa.firstWhere((o) => o.$1 == bahasaAktif.value).$2;
 
   // ---------- Aksi ----------
 
@@ -67,7 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
               const SizedBox(height: 10),
               for (final o in _opsiBahasa)
                 ListTile(
-                  selected: o.$1 == _kodeBahasa,
+                  selected: o.$1 == bahasaAktif.value,
                   selectedTileColor: AppColors.cardSoft,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -80,14 +80,14 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.profilText,
                     ),
                   ),
-                  trailing: o.$1 == _kodeBahasa
+                  trailing: o.$1 == bahasaAktif.value
                       ? const Icon(
                           Icons.check_circle_rounded,
                           color: AppColors.primary,
                         )
                       : null,
                   onTap: () {
-                    setState(() => _kodeBahasa = o.$1);
+                    setState(() => bahasaAktif.value = o.$1);
                     Navigator.pop(ctx);
                   },
                 ),
@@ -160,7 +160,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 icon: Icons.translate_rounded,
                 judul: 'Bahasa Aplikasi',
                 subjudul: _namaBahasa,
-                trailing: _chip(_kodeBahasa, chevron: true),
+                trailing: _chip(bahasaAktif.value, chevron: true),
                 onTap: _pilihBahasa,
               ),
               _baris(

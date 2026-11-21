@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter/services.dart';
+import 'package:ryokou/bahasa.dart';
 
 import 'data/status_pengguna.dart';
 import 'theme/app_colors.dart';
@@ -609,7 +610,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool kecilkanPrefix = false,
   }) {
     return InputDecoration(
-      hintText: hint,
+      hintText: tr(hint),
       hintStyle: const TextStyle(fontSize: 13, color: AppColors.hint),
       filled: true,
       fillColor: AppColors.background,

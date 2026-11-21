@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'package:ryokou/bahasa.dart';
 
 import 'theme/app_assets.dart';
 import 'theme/app_colors.dart';
 import 'widgets/common_widgets.dart';
+import 'widgets/banner_cs.dart';
 import 'widgets/topbar.dart';
 
 // =====================================================================
 //  DATA BANTUAN  (ubah / tambah isi di bagian ini saja)
 // =====================================================================
-
-const String _noCs = '08123456789';
 
 class _Artikel {
   final String judul;
@@ -381,14 +380,6 @@ class _BantuanScreenState extends State<BantuanScreen> {
     );
   }
 
-  Future<void> _salinNomorCs() async {
-    await Clipboard.setData(const ClipboardData(text: _noCs));
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Nomor Customer Service disalin')),
-    );
-  }
-
   // ---------- Halaman ----------
 
   @override
@@ -411,7 +402,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
           const SizedBox(height: 28),
           if (mencari) ..._bagianHasil() else ..._bagianUtama(),
           const SizedBox(height: 12),
-          _kartuCs(),
+          const BannerCs(),
         ],
       ),
     );
@@ -446,18 +437,21 @@ class _BantuanScreenState extends State<BantuanScreen> {
                 fontSize: 14.5,
                 color: AppColors.profilText,
               ),
-              decoration: const InputDecoration(
-                hintText: 'Cari topik bantuan, denda, klaim...',
-                hintStyle: TextStyle(fontSize: 14.5, color: AppColors.hint),
+              decoration: InputDecoration(
+                hintText: tr('Cari topik bantuan, denda, klaim...'),
+                hintStyle: const TextStyle(
+                  fontSize: 14.5,
+                  color: AppColors.hint,
+                ),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 18),
+                contentPadding: const EdgeInsets.symmetric(vertical: 18),
               ),
             ),
           ),
           if (_cari.text.isNotEmpty)
             IconButton(
-              tooltip: 'Hapus',
+              tooltip: tr('Hapus'),
               onPressed: () => setState(_cari.clear),
               icon: const Icon(
                 Icons.close_rounded,
@@ -466,7 +460,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
               ),
             ),
           IconButton(
-            tooltip: 'Filter topik',
+            tooltip: tr('Filter Topik'),
             onPressed: _pilihFilter,
             icon: Icon(
               Icons.tune_rounded,
@@ -724,73 +718,6 @@ class _BantuanScreenState extends State<BantuanScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _kartuCs() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
-            children: [
-              Icon(
-                Icons.support_agent_rounded,
-                size: 30,
-                color: AppColors.csIcon,
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Masih butuh bantuan?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text.rich(
-            TextSpan(
-              style: TextStyle(fontSize: 13, height: 1.4, color: Colors.white),
-              children: [
-                TextSpan(
-                  text:
-                      'Jika mempunyai kendala, hubungi Customer Service pada ',
-                ),
-                TextSpan(
-                  text: _noCs,
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          SizedBox(
-            height: 44,
-            child: OutlinedButton.icon(
-              onPressed: _salinNomorCs,
-              icon: const Icon(Icons.copy_rounded, size: 18),
-              label: const Text('Salin Nomor'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                side: const BorderSide(color: Colors.white54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
