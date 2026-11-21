@@ -228,13 +228,6 @@ const List<_Artikel> _daftarFaq = [
         'sewa. Hubungi Customer Service untuk prosesnya.',
     icon: Icons.update_rounded,
   ),
-
-  // ▼▼▼ TAMBAH FAQ BARU DI BAWAH INI (salin 5 baris ini, lalu isi) ▼▼▼
-  // _Artikel(
-  //   'Tulis pertanyaannya di sini?',
-  //   'Tulis jawabannya di sini.',
-  //   icon: Icons.help_outline_rounded, // boleh dihapus, ikon otomatis "?"
-  // ),
 ];
 
 // =====================================================================
