@@ -986,15 +986,17 @@ class _DetailMotorScreenState extends State<DetailMotorScreen> {
       );
     }
 
-    Widget dua(Widget a, Widget b) => Padding(
+        Widget dua(Widget a, Widget b) => Padding(
       padding: const EdgeInsets.only(top: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: a),
-          const SizedBox(width: 12),
-          Expanded(child: b),
-        ],
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: a),
+            const SizedBox(width: 12),
+            Expanded(child: b),
+          ],
+        ),
       ),
     );
 
