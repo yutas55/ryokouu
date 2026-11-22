@@ -76,7 +76,7 @@ class _ProdukScreenState extends State<ProdukScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 12,
                             mainAxisSpacing: 12,
-                            mainAxisExtent: 306, // tinggi tiap kartu
+                            mainAxisExtent: 314, // tinggi tiap kartu
                           ),
                       itemBuilder: (_, i) => MotorGridCard(motor: daftar[i]),
                     ),
